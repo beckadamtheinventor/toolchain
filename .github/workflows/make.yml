@@ -3,6 +3,7 @@ name: Win/Mac/Linux
 on:
   push:
     branches:
+      - pr/258
       - llvm
   pull_request:
     branches:
