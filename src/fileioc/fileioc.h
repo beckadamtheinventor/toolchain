@@ -187,7 +187,7 @@ size_t ti_Write(const void *data, size_t size, size_t count, const ti_var_t slot
  *
  * @returns The number of chunks read (should be equal to count).
  */
-size_t ti_Read(void *data, size_t size, size_t count, const ti_var_t slot);
+size_t ti_Read(const void *data, size_t size, size_t count, const ti_var_t slot);
 
 /**
  * Writes a character directly into the slot data pointer, and increments the offset.
@@ -346,25 +346,25 @@ void ti_GetName(char *name, const ti_var_t slot);
 /**
  * Renames an AppVar.
  *
- * @param old_name Old name of AppVar.
- * @param new_name New name of AppVar.
+ * @param old Old name of AppVar.
+ * @param new New name of AppVar.
  *
  * @returns 0 if success, 1 if AppVar already exists, 2 any other error occurs.
  * @warning It is potentially hazardous to rename an open AppVar. Close the AppVar before renaming.
  */
-uint8_t ti_Rename(const char *old_name, const char *new_name);
+uint8_t ti_Rename(const char *old, const char *new);
 
 /**
  * Renames a variable.
  *
- * @param old_name Old name of variable.
- * @param new_name New name of variable.
+ * @param old Old name of variable.
+ * @param new New name of variable.
  * @param type Type of variable.
  *
  * @returns 0 if success, 1 if variable already exists, 2 any other error occurs.
  * @warning It is potentially hazardous to rename an open variable. Close the variable before renaming.
  */
-uint8_t ti_RenameVar(const char *old_name, const char *new_name, const uint8_t type);
+uint8_t ti_RenameVar(const char *old, const char *new, const uint8_t type);
 
 /**
  * Stores data or values to an OS variable.

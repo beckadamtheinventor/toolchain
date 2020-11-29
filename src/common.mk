@@ -14,7 +14,7 @@
 # along with this program; if not, write to the Free Software Foundation,
 # Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
-CEDEV_DIR := CEdev
+CEDEV_DIR := CEdev/bos/
 CEDEV_VERSION := 9.0-devel
 
 LINUX := 0
@@ -41,8 +41,8 @@ WINDOWS := 1
 SHELL := cmd.exe
 FASMG ?= fasmg.exe
 EZCC ?= ez80-clang.exe
-NATIVEPATH ?= $(subst /,\,$1)
-NATIVEEXE ?= $(NATIVEPATH).exe
+NATIVEPATH ?= $(subst /,\,$(1))
+NATIVEEXE ?= $(subst /,\,$(1)).exe
 MKDIR ?= ( mkdir $1 2>nul || call )
 REMOVE ?= ( del /f /q $1 2>nul || call )
 RMDIR ?= ( rmdir /s /q $1 2>nul || call )
@@ -56,8 +56,8 @@ RELEASE_NAME = windows
 else
 FASMG ?= fasmg
 EZCC ?= ez80-clang
-NATIVEPATH ?= $(subst \,/,$1)
-NATIVEEXE ?= $(NATIVEPATH)
+NATIVEPATH ?= $(subst \,/,$(1))
+NATIVEEXE ?= $(subst \,/,$(1))
 MKDIR ?= mkdir -p $1
 REMOVE ?= rm -f $1
 RMDIR ?= rm -rf $1
@@ -77,13 +77,12 @@ endif
 endif
 
 INSTALL_PATH := $(call QUOTE_ARG,$(call NATIVEPATH,$(DESTDIR)$(PREFIX)))
-INSTALL_DIR := $(DESTDIR)$(PREFIX)/$(CEDEV_DIR)
-INSTALL_EXAMPLES := $(call QUOTE_ARG,$(call NATIVEPATH,$(INSTALL_DIR)/examples))
-INSTALL_LIB := $(call QUOTE_ARG,$(call NATIVEPATH,$(INSTALL_DIR)/lib/libload))
-INSTALL_SHARED := $(call QUOTE_ARG,$(call NATIVEPATH,$(INSTALL_DIR)/lib/shared))
-INSTALL_STATIC := $(call QUOTE_ARG,$(call NATIVEPATH,$(INSTALL_DIR)/lib/static))
-INSTALL_LINKED := $(call QUOTE_ARG,$(call NATIVEPATH,$(INSTALL_DIR)/lib/linked))
-INSTALL_BIN := $(call QUOTE_ARG,$(call NATIVEPATH,$(INSTALL_DIR)/bin))
-INSTALL_H := $(call QUOTE_ARG,$(call NATIVEPATH,$(INSTALL_DIR)/include))
-INSTALL_META := $(call QUOTE_ARG,$(call NATIVEPATH,$(INSTALL_DIR)/meta))
-INSTALL_DIR := $(call QUOTE_ARG,$(call NATIVEPATH,$(INSTALL_DIR)))
+INSTALL_DIR := $(call QUOTE_ARG,$(call NATIVEPATH,$(DESTDIR)$(PREFIX)/$(CEDEV_DIR)))
+INSTALL_EXAMPLES := $(call NATIVEPATH,$(INSTALL_DIR)/examples)
+INSTALL_LIB := $(call NATIVEPATH,$(INSTALL_DIR)/lib/libload)
+INSTALL_SHARED := $(call NATIVEPATH,$(INSTALL_DIR)/lib/shared)
+INSTALL_STATIC := $(call NATIVEPATH,$(INSTALL_DIR)/lib/static)
+INSTALL_LINKED := $(call NATIVEPATH,$(INSTALL_DIR)/lib/linked)
+INSTALL_BIN := $(call NATIVEPATH,$(INSTALL_DIR)/bin)
+INSTALL_H := $(call NATIVEPATH,$(INSTALL_DIR)/include)
+INSTALL_META := $(call NATIVEPATH,$(INSTALL_DIR)/meta)

@@ -1,7 +1,7 @@
 ### Hello World Demo
 
-Displays the text `Hello, World!` on the calculator.
+This example displays the text "Hello, World!" on the calculator.
 
 ---
 
-This demo is part of the CE C SDK Toolchain.
+This demo is a part of the C SDK Toolchain for use on the CE.

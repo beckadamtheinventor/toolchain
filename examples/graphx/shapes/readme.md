@@ -1,8 +1,8 @@
-### GraphX Shapes Demo
+### GraphX Shapes and Shift Demo
 
-Draws different shapes, pixels, text.
+Draws different shapes, and demonstrates window shifting.
 
-![Screenshot](screenshot.png)
+![Screenshot](screenshot.gif)
 
 ---
 

@@ -1,5 +1,4 @@
 #include <tice.h>
-#include <stdlib.h>
 
 /* Main function, called first */
 int main(void)
@@ -10,7 +9,7 @@ int main(void)
     /* Print a string */
     os_PutStrFull("Hello, World!");
 
-    /* Waits for a key */
+    /* Waits for a keypress */
     while (!os_GetCSC());
 
     /* Return 0 for success */

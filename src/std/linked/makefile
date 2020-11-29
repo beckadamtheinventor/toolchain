@@ -16,31 +16,27 @@
 
 include $(CURDIR)/../../common.mk
 
-BUILD_SRC := $(patsubst %,build/%.src,$(wildcard *.c *.cpp))
+WILDCARD_H := $(wildcard *.h *.hpp)
+WILDCARD_C := $(wildcard *.c)
+BUILD_SRC := $(addprefix build/,$(WILDCARD_C:%.c=%.src))
 
 EZCFLAGS := -S -ffreestanding -Wall -Wextra -Oz
-EZCFLAGS += -D_EZ80 -isystem .. -isystem ../../ce
-EZCXXFLAGS := $(EZCFLAGS) -fno-exceptions -fno-rtti
-EZCXXFLAGS += -isystem ../c++
+EZCFLAGS += -Dreentrant= -D_EZ80 -isystem ..
 
-WILDCARD_SRC = $(wildcard *.src) $(BUILD_SRC)
+WILDCARD_SRC = $(wildcard *.src) $(patsubst %.c,build/%.src,$(wildcard *.c))
 
 all: $(BUILD_SRC)
 
-build/%.c.src: %.c
+build/%.src: %.c
 	$(Q)$(call MKDIR,build)
 	$(Q)$(EZCC) $(EZCFLAGS) $< -o $@
-
-build/%.cpp.src: %.cpp
-	$(Q)$(call MKDIR,build)
-	$(Q)$(EZCC) $(EZCXXFLAGS) $< -o $@
 
 clean:
 	$(Q)$(call RMDIR,build)
 
 install: all
 	$(Q)$(call MKDIR,$(INSTALL_LINKED))
-	$(Q)$(call COPY,$(call NATIVEPATH,$(WILDCARD_SRC)),$(INSTALL_LINKED))
+	$(Q)$(call COPY,$(WILDCARD_SRC),$(INSTALL_LINKED))
 
 .PHONY: all clean
 

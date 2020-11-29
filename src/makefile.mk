@@ -38,6 +38,7 @@ OBJDIR ?= obj
 BINDIR ?= bin
 GFXDIR ?= src/gfx
 DEPS ?=
+
 #----------------------------
 
 # define some common makefile things
@@ -149,18 +150,8 @@ GFXCMD := cd $(GFXDIR) && $(CONVIMG)
 endif
 
 # determine output target flags
-ifeq ($(ARCHIVED),YES)
-CONVBINFLAGS += --archive
-endif
-ifeq ($(COMPRESSED),YES)
-CONVBINFLAGS += --oformat 8xp-auto-decompress
-else
-CONVBINFLAGS += --oformat 8xp
-endif
-ifeq ($(UPPERCASE_NAME),YES)
-CONVBINFLAGS += --uppercase
-endif
-CONVBINFLAGS += --name $(NAME)
+CONVBINFLAGS += --oformat bin
+
 
 # output debug map file
 ifeq ($(OUTPUT_MAP),YES)

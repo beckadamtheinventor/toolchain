@@ -20,13 +20,13 @@ LIB_SRC := libload.asm
 LIB_LIB := libload.lib
 LIB_8XV := libload.8xv
 
-all: $(LIB_8XV)
+#all: $(LIB_8XV)
 
-$(LIB_8XV): $(LIB_SRC)
-	$(Q)$(FASMG) $< $@
+#$(LIB_8XV): $(LIB_SRC)
+#	$(Q)$(FASMG) $< $@
 
 clean:
-	$(Q)$(call REMOVE,$(LIB_LIB) $(LIB_8XV))
+	$(Q)$(call REMOVE,$(LIB_8XV))
 
 install: all
 	$(Q)$(call MKDIR,$(INSTALL_LIB))

@@ -11,7 +11,6 @@ int main(void)
     gfx_sprite_t *apple;
 
     /* Allocate space for the decompressed sprite */
-    /* Same as gfx_AllocSprite() */
     apple = gfx_MallocSprite(apple_width, apple_height);
 
     /* Decompress the sprite */

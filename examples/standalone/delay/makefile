@@ -1,20 +1,11 @@
 # ----------------------------
-# Makefile Options
+# Set ICON to the png icon file name
+# Set DESCRIPTION to display within a compatible shell
 # ----------------------------
 
-NAME ?= DEMO
-ICON ?= icon.png
-DESCRIPTION ?= "CE C Toolchain Demo"
-COMPRESSED ?= NO
-ARCHIVED ?= NO
-
-CFLAGS ?= -Wall -Wextra -Oz
-CXXFLAGS ?= -Wall -Wextra -Oz
+ICON        ?= iconc.png
+DESCRIPTION ?= "C SDK Demo"
 
 # ----------------------------
 
-ifndef CEDEV
-$(error CEDEV environment path variable is not set)
-endif
-
-include $(CEDEV)/meta/makefile.mk
+include $(CEDEV)/bos/include/.makefile
