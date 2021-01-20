@@ -36,13 +36,13 @@ LIB        :=$(NAME).lib
 LIB_8XV    :=$(NAME).8xv
 LIB_H      :=$(NAME).h
 
-#all: $(LIB_8XV)
+all: $(LIB_8XV)
 
-#$(LIB_8XV): $(SRC) fat.asm
-#	$(FASMG) $< $@
+$(LIB_8XV): $(SRC) fat.asm
+	$(FASMG) $< $@
 
 clean:
-	$(RM) $(LIB_8XV)
+	$(RM) $(LIB) $(LIB_8XV)
 
 install:
 	$(CP) $(LIB_H) $(H_LOC)

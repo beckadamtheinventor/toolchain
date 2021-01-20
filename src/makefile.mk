@@ -23,8 +23,8 @@ DESCRIPTION ?=
 COMPRESSED ?= NO
 ARCHIVED ?= NO
 CLEANUP ?= YES
-BSSHEAP_LOW ?= D031F6
-BSSHEAP_HIGH ?= D13FD6
+BSSHEAP_LOW ?= D05200
+BSSHEAP_HIGH ?= D15200
 STACK_HIGH ?= D1A87E
 INIT_LOC ?= D1A87F
 USE_FLASH_FUNCTIONS ?= YES
@@ -34,8 +34,8 @@ CFLAGS ?= -Wall -Wextra -Oz
 CXXFLAGS ?=
 LDFLAGS ?=
 SRCDIR ?= src
-OBJDIR ?= obj
-BINDIR ?= bin
+OBJDIR ?= bosobj
+BINDIR ?= bosbin
 GFXDIR ?= src/gfx
 DEPS ?=
 
@@ -90,7 +90,7 @@ MAKEFILE_FILE := $(lastword $(MAKEFILE_LIST))
 MKDIR = $(call NATIVEMKDR,$(call QUOTE_ARG,$(call NATIVEPATH,$1)))
 
 FASMG_FILES = $(subst $(space),$(comma) ,$(patsubst %,"%",$(subst ",\",$(subst \,\\,$(call NATIVEPATH,$1)))))#"
-LINKER_SCRIPT ?= $(CEDEV)/meta/linker_script
+LINKER_SCRIPT ?= $(CEDEV)/bos/meta/linker_script
 
 # ensure native paths
 SRCDIR := $(call NATIVEPATH,$(SRCDIR))
@@ -106,7 +106,7 @@ ICONIMG := $(wildcard $(call NATIVEPATH,$(ICON)))
 ICONSRC := $(call NATIVEPATH,$(OBJDIR)/icon.src)
 
 # startup routines
-LDCRT0 := $(call NATIVEPATH,$(CEDEV)/lib/shared/crt0.src)
+LDCRT0 := $(call NATIVEPATH,$(CEDEV)/bos/lib/shared/crt0.src)
 
 # source: http://blog.jgc.org/2011/07/gnu-make-recursive-wildcard-function.html
 rwildcard = $(foreach d,$(wildcard $1*),$(call rwildcard,$d/,$2)$(filter $(subst *,%,$2),$d))
@@ -124,7 +124,7 @@ LINK_ASMSOURCES := $(ASMSOURCES)
 
 # files created to be used for linking
 LDFILES := $(LDCRT0) $(LINK_CSOURCES) $(LINK_CPPSOURCES) $(LINK_ASMSOURCES)
-LDLIBS := $(wildcard $(CEDEV)/lib/libload/*.lib)
+LDLIBS := $(wildcard $(CEDEV)/bos/lib/libload/*.lib)
 
 # check if there is an icon present that to convert
 ifneq ($(ICONIMG),)
@@ -164,7 +164,7 @@ LDSTATIC := 1
 endif
 
 # define the c/c++ flags used by clang
-EZCFLAGS = -nostdinc -isystem $(CEDEV)/include -Dinterrupt="__attribute__((__interrupt__))"
+EZCFLAGS = -nostdinc -isystem $(CEDEV)/bos/include -Dinterrupt="__attribute__((__interrupt__))"
 EZCFLAGS += -Wno-main-return-type -Xclang -fforce-mangle-main-argc-argv -D_EZ80 -D$(DEBUGMODE) $(CCDEBUG)
 EZCXXFLAGS = $(EZCFLAGS) -fno-exceptions -fno-rtti $(CXXFLAGS)
 EZCFLAGS += $(CFLAGS)
@@ -172,7 +172,7 @@ EZCFLAGS += $(CFLAGS)
 # these are the fasmg linker flags
 FASMFLAGS = \
 	-n \
-	$(call QUOTE_ARG,$(call NATIVEPATH,$(CEDEV)/meta/ld.alm)) \
+	$(call QUOTE_ARG,$(call NATIVEPATH,$(CEDEV)/bos/meta/ld.alm)) \
 	-i $(call QUOTE_ARG,DEBUG := $(LDDEBUG)) \
 	-i $(call QUOTE_ARG,STATIC := $(LDSTATIC)) \
 	-i $(call QUOTE_ARG,include $(call FASMG_FILES,$(LINKER_SCRIPT))) \

@@ -21,13 +21,13 @@ LIB_LIB := fileioc.lib
 LIB_8XV := fileioc.8xv
 LIB_H := fileioc.h
 
-#all: $(LIB_8XV)
+all: $(LIB_8XV)
 
-#$(LIB_8XV): $(LIB_SRC)
-#	$(Q)$(FASMG) $< $@
+$(LIB_8XV): $(LIB_SRC)
+	$(Q)$(FASMG) $< $@
 
 clean:
-	$(Q)$(call REMOVE,$(LIB_8XV))
+	$(Q)$(call REMOVE,$(LIB_LIB) $(LIB_8XV))
 
 install: all
 	$(Q)$(call MKDIR,$(INSTALL_LIB))

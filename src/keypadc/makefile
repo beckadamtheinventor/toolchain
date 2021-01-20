@@ -21,10 +21,10 @@ LIB_LIB := keypadc.lib
 LIB_8XV := keypadc.8xv
 LIB_H := keypadc.h
 
-#all: $(LIB_8XV)
+all: $(LIB_8XV)
 
-#$(LIB_8XV): $(LIB_SRC)
-#	$(Q)$(FASMG) $< $@
+$(LIB_8XV): $(LIB_SRC)
+	$(Q)$(FASMG) $< $@
 
 clean:
 	$(Q)$(call REMOVE,$(LIB_8XV))

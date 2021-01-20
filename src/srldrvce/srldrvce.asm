@@ -21,7 +21,6 @@ include_library '../usbdrvce/usbdrvce.asm'
 	export srl_Read_Blocking
 	export srl_Write_Blocking
 	export srl_GetCDCStandardDescriptors
-	export srl_HandleEvent
 ;-------------------------------------------------------------------------------
 macro compare_hl_zero?
 	add	hl,de
@@ -180,59 +179,70 @@ end struct
 
 ; enum usb_transfer_direction
 virtual at 0
-	?HOST_TO_DEVICE				rb 1 shl 7
-	?DEVICE_TO_HOST				rb 1 shl 7
+	?HOST_TO_DEVICE			rb 1 shl 7
+	?DEVICE_TO_HOST			rb 1 shl 7
 end virtual
 
 virtual at 0
-	USB_SUCCESS				rb 1
-	USB_IGNORE				rb 1
-	USB_ERROR_SYSTEM			rb 1
-	USB_ERROR_INVALID_PARAM			rb 1
-	USB_ERROR_SCHEDULE_FULL			rb 1
-	USB_ERROR_NO_DEVICE			rb 1
-	USB_ERROR_NO_MEMORY			rb 1
-	USB_ERROR_NOT_SUPPORTED			rb 1
-	USB_ERROR_TIMEOUT			rb 1
-	USB_ERROR_FAILED			rb 1
+	USB_SUCCESS			rb 1
+	USB_IGNORE			rb 1
+	USB_ERROR_SYSTEM		rb 1
+	USB_ERROR_INVALID_PARAM		rb 1
+	USB_ERROR_SCHEDULE_FULL		rb 1
+	USB_ERROR_NO_DEVICE		rb 1
+	USB_ERROR_NO_MEMORY		rb 1
+	USB_ERROR_NOT_SUPPORTED		rb 1
+	USB_ERROR_TIMEOUT		rb 1
+	USB_ERROR_FAILED		rb 1
 end virtual
 
+; enum usb_transfer_status
+?USB_TRANSFER_COMPLETED			:= 0
+?USB_TRANSFER_STALLED			:= 1 shl 0
+?USB_TRANSFER_NO_DEVICE			:= 1 shl 1
+?USB_TRANSFER_HOST_ERROR		:= 1 shl 2
+?USB_TRANSFER_ERROR			:= 1 shl 3
+?USB_TRANSFER_OVERFLOW			:= 1 shl 4
+?USB_TRANSFER_BUS_ERROR			:= 1 shl 5
+?USB_TRANSFER_FAILED			:= 1 shl 6
+?USB_TRANSFER_CANCELLED			:= 1 shl 7
+
 virtual at 0
-	SRL_SUCCESS				rb 1
-	SRL_IGNORE				rb 1
-	SRL_ERROR_SYSTEM			rb 1
-	SRL_ERROR_INVALID_PARAM			rb 1
-	SRL_ERROR_SCHEDULE_FULL			rb 1
-	SRL_ERROR_NO_DEVICE			rb 1
-	SRL_ERROR_NO_MEMORY			rb 1
-	SRL_ERROR_NOT_SUPPORTED			rb 1
-	SRL_ERROR_TIMEOUT			rb 1
-	SRL_ERROR_FAILED			rb 1
-	SRL_ERROR_INVALID_INTERFACE		rb 1
+	SRL_SUCCESS			rb 1
+	SRL_IGNORE			rb 1
+	SRL_ERROR_SYSTEM		rb 1
+	SRL_ERROR_INVALID_PARAM		rb 1
+	SRL_ERROR_SCHEDULE_FULL		rb 1
+	SRL_ERROR_NO_DEVICE		rb 1
+	SRL_ERROR_NO_MEMORY		rb 1
+	SRL_ERROR_NOT_SUPPORTED		rb 1
+	SRL_ERROR_TIMEOUT		rb 1
+	SRL_ERROR_FAILED		rb 1
+	SRL_ERROR_INVALID_INTERFACE	rb 1
 end virtual
 
 ; enum usb_descriptor_type
 virtual at 1
-	?DEVICE_DESCRIPTOR			rb 1
-	?CONFIGURATION_DESCRIPTOR		rb 1
-	?STRING_DESCRIPTOR			rb 1
-	?INTERFACE_DESCRIPTOR			rb 1
-	?ENDPOINT_DESCRIPTOR			rb 1
+	?DEVICE_DESCRIPTOR		rb 1
+	?CONFIGURATION_DESCRIPTOR	rb 1
+	?STRING_DESCRIPTOR		rb 1
+	?INTERFACE_DESCRIPTOR		rb 1
+	?ENDPOINT_DESCRIPTOR		rb 1
 end virtual
 
 ; enum usb_transfer_type
 virtual at 0
-	?CONTROL_TRANSFER			rb 1
-	?ISOCHRONOUS_TRANSFER			rb 1
-	?BULK_TRANSFER				rb 1
-	?INTERRUPT_TRANSFER			rb 1
+	?CONTROL_TRANSFER		rb 1
+	?ISOCHRONOUS_TRANSFER		rb 1
+	?BULK_TRANSFER			rb 1
+	?INTERRUPT_TRANSFER		rb 1
 end virtual
 
 virtual at 0
-  USB_IS_DISABLED				rb 1
-  USB_IS_ENABLED				rb 1
-  USB_IS_DEVICES				rb 1
-  USB_IS_HUBS					rb 1
+  USB_IS_DISABLED			rb 1
+  USB_IS_ENABLED			rb 1
+  USB_IS_DEVICES			rb 1
+  USB_IS_HUBS				rb 1
 end virtual
 
 ;-------------------------------------------------------------------------------
@@ -266,8 +276,6 @@ srl_Init:
 	ld	(.epIn),a
 	ld	a,$04
 	ld	(.epOut),a
-	ld	hl,(iy + 6)
-	ld	(host_device),hl			; store host device
 	jq	.getEndpoints
 
 .host:
@@ -720,88 +728,6 @@ end iterate
 	jq	.exit
 
 ;-------------------------------------------------------------------------------
-;usb_error_t srl_HandleEvent(usb_event_t event, void *event_data);
-srl_HandleEvent:
-	ld	iy,0
-	add	iy,sp
-	ld	a,(iy+3)
-	cp	a,7 ; check if USB_DEFAULT_SETUP_EVENT
-	jq	nz,.success
-
-	ld	hl,(iy+6) ; check direction
-	ld	a,(hl)
-	cp	a,$21
-	jq	z,.in
-	cp	a,$a1
-	jq	nz,.success
-
-	inc	hl ; transfer is out
-	ld	a,$21 ; check if GET_LINE_CODING request
-	cp	a,(hl)
-	jq	nz,.success
-
-	; handle GET_LINE_CODING
-	;jq	.transfer
-	push	bc ; callback data
-	ld	bc,.callback
-	push	bc ; handler
-	ld	bc,virtual_line_coding
-	push	bc ; buffer
-	ld	bc,7
-	push	bc ; length
-
-	ld	bc,0
-	push	bc ; ep number
-	ld	bc,(host_device)
-	push	bc ; device
-	call	usb_GetDeviceEndpoint
-	pop	bc,bc
-	push	hl ; endpoint
-
-	call	usb_ScheduleTransfer
-	pop	bc,bc,bc,bc,bc
-	jq	.ignore
-
-.in:
-	inc	hl
-	ld	a,(hl)
-	cp	a,$20
-	jq	z,.transfer
-	cp	a,$22
-	jq	nz,.success
-
-	; SET_CONTROL_LINE_STATE request
-	; you know what, I really don't care
-	jq	.transfer
-.transfer:
-	push	bc ; callback data
-	ld	bc,.callback
-	push	bc ; handler
-	ld	bc,virtual_line_coding
-	push	bc ; buffer
-	dec	hl
-	push	hl ; setup
-
-	ld	bc,0
-	push	bc ; ep number
-	ld	bc,(host_device)
-	push	bc ; device
-	call	usb_GetDeviceEndpoint
-	pop	bc,bc
-	push	hl ; endpoint
-
-	call	usb_ScheduleControlTransfer
-	pop	bc,bc,bc,bc,bc
-
-.ignore:
-	ld	hl,USB_IGNORE
-	ret
-.success:
-.callback: ; todo: should this actually do something?
-	ld	hl,USB_SUCCESS
-	ret
-
-;-------------------------------------------------------------------------------
 ;srl_error_t srl_SetRate(srl_device_t *srl, uint24_t rate);
 srl_SetRate:
 	ld	iy,0
@@ -921,7 +847,7 @@ end repeat
 
 	pop	af,bc
 
-	call	ti._ldivu				; euhl / aubc -> euhl
+	call	ti._ldivu			; euhl / aubc -> euhl
 
 	ld	bc,.bmNums
 
@@ -1168,9 +1094,9 @@ srl_Read:
 .sched:
 	ld	a,(xsrl_Device.readBufActive)	; if read is inactive
 	or	a,a
-	push	de
+	push	de,iy
 	call	z,srl_StartAsyncRead		; attempt to schedule async transfer
-	pop	de
+	pop	iy,de
 	xor	a,a				; get number of bytes transferred
 	ld	hl,(iy + 9)
 	sbc	hl,de
@@ -1209,14 +1135,32 @@ srl_Write:
 	add	hl,bc
 	ld	bc,(xsrl_Device.writeBufEnd)
 	sbc	hl,bc
-	push	hl
-	push	hl
+	ex	hl,de
+
+	ld	hl,(xsrl_Device.writeBufStart)
+	ld	bc,(xsrl_Device.writeBuf)
+	or	a,a
+	sbc	hl,bc
+	jq	nz,.notstart1
+
+	dec	de
+
+.notstart1:
+	push	de,de
 	pop	bc
 
 	ld	hl,(iy + 6)			; copy transferred bytes from buffer to writeBufEnd
 	ld	de,(xsrl_Device.writeBufEnd)
 	ldir
 	ld	hl,(xsrl_Device.writeBuf)	; writeBufEnd = writeBuf
+	jq	nz,.notstart2
+
+	dec	hl
+	ld	(xsrl_Device.writeBufEnd),hl
+	pop	de
+	jq	.exit
+
+.notstart2:
 	ld	(xsrl_Device.writeBufEnd),hl
 	pop	de				; transferred = writeBuf + writeBufSize - writeBufEnd
 	jq	.wrap
@@ -1233,6 +1177,7 @@ srl_Write:
 	ld	hl,(xsrl_Device.writeBufStart)
 	ld	bc,(xsrl_Device.writeBufEnd)
 	sbc	hl,bc
+	jq	z,.exit				; if the buffer is full, just return
 	push	hl
 	push	hl
 	pop	bc
@@ -1368,11 +1313,20 @@ srl_Write_Blocking:
 srl_ReadCallback:
 	ld	iy,0
 	add	iy,sp
+	
+	ld	a,(iy + 6)			; do nothing if device was disconnected
+	and	a,USB_TRANSFER_NO_DEVICE
+	jr	z,.not_disconnected
+	xor	a,a
+	ld	(xsrl_Device.readBufActive),a
+	ret
+
+.not_disconnected:
 	push	ix
 	ld	ix,(iy + 12)
 	ld	hl,(iy + 9)			; return if nothing was transferred
 	compare_hl_zero
-	jq	z,.exit
+	jq	z,.restart
 
 	ld	a,SRL_FTDI
 	cp	a,(xsrl_Device.type)
@@ -1380,7 +1334,7 @@ srl_ReadCallback:
 	dec	hl				; transferred -= 2
 	dec	hl
 	compare_hl_zero
-	jq	z,.exit				; nothing was transferred
+	jq	z,.restart			; nothing was transferred
 
 	push	hl
 	pop	bc
@@ -1396,8 +1350,9 @@ srl_ReadCallback:
 	ld	bc,(xsrl_Device.readBufEnd)	;readBufEnd += transferred
 	add	hl,bc
 	ld	(xsrl_Device.readBufEnd),hl
-.exit:
+.restart:
 	call	srl_StartAsyncRead
+.exit:
 	pop	ix
 	ld	hl,USB_SUCCESS
 	ret
@@ -1407,6 +1362,12 @@ srl_ReadCallback:
 srl_WriteCallback:
 	ld	iy,0
 	add	iy,sp
+
+	ld	a,(iy + 6)			; do nothing if device was disconnected
+	and	a,USB_TRANSFER_NO_DEVICE
+	ld	a,0
+	ret	nz
+
 	push	ix
 	ld	ix,(iy + 12)
 	ld	bc,(iy + 9)			; writeBufStart += transferred
@@ -1579,6 +1540,73 @@ pl2303VendorWrite:
 	ret
 .setup	setuppkt	$40,$01,$0000,$0000,0
 
+srl_GetCDCStandardDescriptors:
+	call	ti.os.GetSystemStats
+	ld	de,4
+	add	hl,de
+	bit	0,(hl)
+	jq	z,.84pce
+
+	ld	a,$60
+	ld	(.device+deviceDescriptor.bcdDevice),a
+	ld	hl,.string83
+	ld	(.model),hl
+.84pce:
+	ld	iy,ti.flags	; get serial number
+	call	ti.GetSerial
+	jq	nz,.noserial
+
+	ld	a,3
+	ld	hl,.device+deviceDescriptor.iSerialNumber
+	ld	(hl),a
+
+	ld	de,.stringserialnum + 2
+	ld	hl,ti.OP4
+	ld	b,5
+.loop_byte:
+	ld	a,(hl)
+	rra
+	rra
+	rra
+	rra
+	call	.conv_hex
+	ld	a,(hl)
+	call	.conv_hex
+	inc	hl
+	djnz	.loop_byte
+.noserial:
+	ld	hl,.descriptors
+	ret
+.conv_hex:
+	and	a,$f
+	add	a,'0'
+	cp	a,'9'+1
+	jq	c,.store
+	add	a,'A'-'9'-1
+.store:
+	ex	de,hl
+	ld	(hl),a
+	ex	de,hl
+	inc	de
+	inc	de
+	ret
+
+.descriptors:
+	dl .device, .configurations, .langids
+	db 3
+	dl .strings
+.device emit $12: $1201000202000040C016E105200201020001 bswap $12
+.configurations dl .configuration1
+.configuration1 emit $3e: $09023e00020100c0320904000001020200000524000110042402000524060001070582030800ff09040100020a0000000705040240000107058302400001 bswap $3e
+.langids dw $0304, $0409
+.strings dl .string1
+.model dl .string84
+.serial dl .stringserialnum
+.string1 dw $033E, 'T','e','x','a','s',' ','I','n','s','t','r','u','m','e','n','t','s',' ','I','n','c','o','r','p','o','r','a','t','e','d'
+.string83 dw $0322, 'T','I','-','8','3',' ','P','r','e','m','i','u','m',' ','C','E'
+.string84 dw $031C, 'T','I','-','8','4',' ','P','l','u','s',' ','C','E'
+.stringserialnum dw $0316, '0','0','0','0','0','0','0','0','0','0'
+
 ;temp
 openDebug:
 	push	hl
@@ -1613,32 +1641,10 @@ dbg_WriteByte:
 ; library data
 ;-------------------------------------------------------------------------------
 
-host_device:
-	dl	0
-virtual_line_coding:
-	db	$80,$25,0,0,0,0,8
-
 setup.setlinecoding	setuppkt	$21,$20,$0000,$0000,7
 setup.ftdisetrate	setuppkt	$40,$03,$0000,$0000,0
 
 defaultlinecoding:
-	db	$80,$25,0,0,0,0,8
+db	$80,$25,0,0,0,0,8
 
 tmp tmp_data
-
-srl_GetCDCStandardDescriptors:
-	ld	hl,.descriptors
-	ret
-.descriptors:
-	dl .device, .configurations, .langids
-	db 2
-	dl .strings
-.device emit $12: $1201000202000040510408E0200201020001 bswap $12
-.configurations dl .configuration1
-.configuration1 emit $3e: $09023e00020100c0320904000001020200000524000110042402000524060001070582030800ff09040100020a0000000705040240000107058302400001 bswap $3e
-.langids dw $0304, $0409
-.strings dl .string1
-.model dl .string84
-.string1 dw $033E, 'T','e','x','a','s',' ','I','n','s','t','r','u','m','e','n','t','s',' ','I','n','c','o','r','p','o','r','a','t','e','d'
-.string83 dw $0322, 'T','I','-','8','3',' ','P','r','e','m','i','u','m',' ','C','E'
-.string84 dw $031C, 'T','I','-','8','4',' ','P','l','u','s',' ','C','E'
