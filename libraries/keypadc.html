@@ -613,8 +613,8 @@ The following code sets up a simple falling edge detector to catch this.</p>
 </dd></dl>
 
 <dl class="cpp function">
-<dt id="_CPPv412kb_QueueKeysP10kb_queue_t">
-<span id="_CPPv312kb_QueueKeysP10kb_queue_t"></span><span id="_CPPv212kb_QueueKeysP10kb_queue_t"></span><span id="kb_QueueKeys__kb_queue_tP"></span><span class="target" id="keypadc_8h_1a806e04befa09e08235b52310b696ec02"></span>uint8_t <code class="sig-name descname">kb_QueueKeys</code><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv410kb_queue_t" title="kb_queue_t">kb_queue_t</a> *<em>queue</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv412kb_QueueKeysP10kb_queue_t" title="Permalink to this definition">¶</a><br /></dt>
+<dt id="_CPPv414kb_EnqueueKeysP10kb_queue_t">
+<span id="_CPPv314kb_EnqueueKeysP10kb_queue_t"></span><span id="_CPPv214kb_EnqueueKeysP10kb_queue_t"></span><span id="kb_EnqueueKeys__kb_queue_tP"></span><span class="target" id="keypadc_8h_1af1839af85de629a01baa7ff4dc6e619e"></span>uint8_t <code class="sig-name descname">kb_EnqueueKeys</code><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv410kb_queue_t" title="kb_queue_t">kb_queue_t</a> *<em>queue</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv414kb_EnqueueKeysP10kb_queue_t" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Scans the keypad, queuing found keycodes for later processing. Returns 0 if no keys queued. <dl class="simple">
 <dt><strong>Note</strong></dt><dd><p>Disables interrupts. </p>
 </dd>
@@ -627,8 +627,8 @@ The following code sets up a simple falling edge detector to catch this.</p>
 </dd></dl>
 
 <dl class="cpp function">
-<dt id="_CPPv413kb_UnqueueKeyP10kb_queue_t">
-<span id="_CPPv313kb_UnqueueKeyP10kb_queue_t"></span><span id="_CPPv213kb_UnqueueKeyP10kb_queue_t"></span><span id="kb_UnqueueKey__kb_queue_tP"></span><span class="target" id="keypadc_8h_1a8644401994d0d5729d14c68db7623f86"></span><a class="reference internal" href="#_CPPv48kb_key_t" title="kb_key_t">kb_key_t</a> <code class="sig-name descname">kb_UnqueueKey</code><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv410kb_queue_t" title="kb_queue_t">kb_queue_t</a> *<em>queue</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv413kb_UnqueueKeyP10kb_queue_t" title="Permalink to this definition">¶</a><br /></dt>
+<dt id="_CPPv413kb_DequeueKeyP10kb_queue_t">
+<span id="_CPPv313kb_DequeueKeyP10kb_queue_t"></span><span id="_CPPv213kb_DequeueKeyP10kb_queue_t"></span><span id="kb_DequeueKey__kb_queue_tP"></span><span class="target" id="keypadc_8h_1a25cec729fefc7a87a70b09b12e7c2099"></span><a class="reference internal" href="#_CPPv48kb_key_t" title="kb_key_t">kb_key_t</a> <code class="sig-name descname">kb_DequeueKey</code><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv410kb_queue_t" title="kb_queue_t">kb_queue_t</a> *<em>queue</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv413kb_DequeueKeyP10kb_queue_t" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Pops a keycode from a queue. Returns 0 if no more keys in buffer. <dl class="simple">
 <dt><strong>Parameters</strong></dt><dd><ul class="breatheparameterlist simple">
 <li><p><code class="docutils literal notranslate"><span class="pre">queue</span></code>: Queue to pop keycode from. </p></li>
