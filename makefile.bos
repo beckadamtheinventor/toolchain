@@ -1,0 +1,5 @@
+
+#replace DEMO to the name of your program
+NAME ?= DEMO
+
+include $(CEDEV)/bos/meta/makefile.mk

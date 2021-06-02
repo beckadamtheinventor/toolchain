@@ -1,0 +1,153 @@
+
+	assume	adl=1
+
+	section	.text
+	public _errno
+_errno := $d008dc
+
+	section	.header
+	db $EF,$7B
+	jp __init
+	db "REX",0
+	public __init
+__init:
+	db	$00		; C program identifier (nop)
+
+	section	.launcher
+	public	__init_libload
+__init_libload:
+	ld	hl,__libloadname
+	push	hl
+extern bos.fs_GetFilePtr
+	call	bos.fs_GetFilePtr
+	pop	bc
+	jq	c,__libloadnotfound
+	ld	de,__relocationstart ; start of relocation data
+	jp	(hl)		; jump to the loader -- it should take care of everything else
+__libloadnotfound:
+	ld hl,__missinglibload
+	jq __notfoundprint
+__notfound:
+	ld	hl,__missingappvar
+__notfoundprint:
+extern bos.gui_DrawConsoleWindow
+	call	bos.gui_DrawConsoleWindow
+	ld	hl,__webaddress
+extern bos.gui_Print
+	call	bos.gui_Print
+extern bos.sys_WaitKeyCycle
+	jp	bos.sys_WaitKeyCycle
+
+
+
+	extern	__relocationstart
+
+	section	.rodata
+
+	private __missinglibload
+__missinglibload:
+	db	"Missing LibLoad",$A,0
+	private	__missingappvar
+__missingappvar:
+	db	"Missing Library",$A,0
+	private	__webaddress
+__webaddress:
+	db	"http://tiny.cc/clibs",$A,0
+	private	__libloadname
+__libloadname:
+	db	"/lib/LibLoad.dll",0
+
+	section	.start
+
+ifextern ___main_argc_argv
+	extern	___main_argc_argv
+	__main := ___main_argc_argv
+else
+	extern	_main
+	__main := _main
+end if
+
+	public __start
+__start:
+	call	00004F4h	; _usb_DisableTimer
+	di			; disable interrupts
+	ld	hl,0E00305h
+	push	hl		; save flash wait state control port
+	ld	a,(hl)
+	push	af		; save flash wait states
+	ld	(hl),h		; set flash wait states to 3; 1 was definitely
+				; too low for some calcs, 2 is untested
+	push	iy		; save iy (flags)
+	ld	(__exitsp),sp	; save sp for exiting
+if __len_bss > 0
+if __len_bss = 1
+	xor	a,a
+	ld	(__low_bss),a
+else if __len_bss = 2
+	ld	hl,__low_bss
+	xor	a,a
+	ld	(hl),a
+	inc	hl
+	ld	(hl),a
+else if __len_bss = 3
+	or	a,a
+	sbc	hl,hl
+	ld	(__low_bss),hl
+else
+	ld	hl,__low_bss
+if __len_bss < 258
+if __len_bss = 256 | __len_bss = 257
+	xor	a,a
+	ld	b,a
+else
+	ld	b,__len_bss
+end if
+__clearbssloop:
+	ld	(hl),a
+	inc	hl
+	djnz	__clearbssloop
+if __len_bss = 257
+	ld	(hl),a
+end if
+else
+	ld	bc,__len_bss
+	call	bos._MemClear
+extern bos._MemClear
+end if
+end if
+end if
+	call	__main
+	public	__exit
+__exit:
+	ld	sp,0
+	public	__exitsp
+__exitsp := $-3
+	pop	iy		; iy = flags
+	pop	af		; a = original flash wait states
+	ex	(sp),hl		; hl = flash wait state control port,
+				; save exit code
+	ld	(hl),a		; restore flash wait states
+	call	00004F0h	; _usb_ResetTimer
+
+	extern	__low_bss
+	extern	__len_bss
+
+	section	.cleanup
+	public	__cleanup
+__cleanup:
+	call	bos._ClrScrn
+extern bos._ClrScrn
+	call	bos._HomeUp
+extern bos._HomeUp
+
+
+	section	.exit
+	pop	hl		; hl = exit code
+	ret
+
+	public	_exit
+_exit:
+	pop	hl
+	pop	hl
+	jq	__exit
+

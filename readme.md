@@ -1,25 +1,23 @@
-# CE C Programming Toolchain/SDK   [![Build Status](https://api.travis-ci.org/CE-Programming/toolchain.svg?branch=master)](https://travis-ci.org/CE-Programming/toolchain) [![Build Status](https://ci.appveyor.com/api/projects/status/github/CE-Programming/toolchain?branch=master&svg=true)](https://ci.appveyor.com/project/adriweb/toolchain) [![IRC badge](https://img.shields.io/badge/IRC%20channel-%23ez80--dev%20on%20EFNet-blue.svg)](http://chat.efnet.org/irc.cgi?adv=1&nick=ce-dev&chan=%23ez80-dev)
-
+# CE C Programming Toolchain/SDK (BOS)
 The CE C Software Development Kit incorporates a wide variety of tools and documentation in order to build programs in C natively for the TI-84 Plus CE / TI-83 Premium CE calculators series.
 
 ## Important Note
+This toolchain requires the standard CE C toolchain to be installed.
 This is the *BOS* toolchain, and is not for use with calculators running TI-OS.
-Any examples marked as "(todo)" are not yet implemented.
-FileIOC is not fully implemented and FontLibC is not implemented at all.
+Additionally, the examples folder has not been entirely reconfigured to work with this toolchain.
+
+## Installation
+Copy the `bos` folder into your CEdev directory.
 
 ## Getting Started
-
-It is recommended that you grab the latest release from [here](https://github.com/CE-Programming/toolchain/releases/latest) if you are looking to get started. Feel free to also bookmark the [wiki pages](https://github.com/CE-Programming/toolchain/wiki), as they will become quite helpful.
-
-Included you will find examples using the ['Standard' CE C Libraries](https://github.com/CE-Programming/libraries/releases/latest). These provide efficient and easy support for graphics, file I/O, keypad input, etc. Be sure to grab them if you plan to use them.  
+See `makefile.bos` for makefile structure for use with this toolchain.
 The [header documentation](https://ce-programming.github.io/toolchain/files.html) will let you know about the available functions.
 
+## Sending binaries
+Currently there's two ways to send binaries to BOS.
+Putting the file on a FAT32-formatted USB drive, connecting it to the calc, and copying the file over from the command line, or (CEmu only) adding the file to the ROM.
+To copy the file from USB to calc, on-calc run: `usbrecv /FILE/ON/USB /file/on/calc`
+To add the file to the ROM for use with CEmu: `python add_file_to_rom.py /path/on/computer /path/on/rom`
+
 ## Help
-
-You can join us on the EFNet IRC server, on the `#ez80-dev` channel, if you have any questions ([webchat link](http://chat.efnet.org:9090/?nick=sdk-user&channels=%23ez80-dev&Login=Login)).  
-If you don't get a response in a reasonable amount of time, feel free to ask it [here](https://github.com/CE-Programming/toolchain/issues) and we will get back to you as soon as possible.
-
-## Contributing
-
-If you want to contribute to the toolchain, feel free to open a [Pull Request](https://github.com/CE-Programming/toolchain/pulls), or submit an [issue/feature request](https://github.com/CE-Programming/toolchain/issues).  
-If you would like to build the toolchain from scratch for your OS, visit the appropriate [wiki page](https://github.com/CE-Programming/toolchain/wiki/Building-the-toolchain). Thanks!
+Feel free to contact me on [Cemetech](https://www.cemetech.net/forum/profile.php?mode=viewprofile&u=18775)
