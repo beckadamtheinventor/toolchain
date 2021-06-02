@@ -12,4 +12,4 @@ DESCRIPTION ?= "C SDK Demo"
 
 # ----------------------------
 
-include $(CEDEV)/include/.makefile
+include $(CEDEV)/bos/meta/makefile.mk

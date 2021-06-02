@@ -1,3 +1,4 @@
+
 	assume	adl=1
 
 	section	.text
@@ -17,15 +18,10 @@ __init:
 __init_libload:
 	ld	hl,__libloadname
 	push	hl
-	call	02012Ch		; bos.fs_OpenFile
+extern bos.fs_GetFilePtr
+	call	bos.fs_GetFilePtr
 	pop	bc
-	jr	c,__libloadnotfound
-	ld	bc,$C
-	add	hl,bc
-	ld	hl,(hl)
-	push	hl
-	call	020130h		; bos.fs_GetSectorAddress
-	pop	bc
+	jq	c,__libloadnotfound
 	ld	de,__relocationstart ; start of relocation data
 	jp	(hl)		; jump to the loader -- it should take care of everything else
 __libloadnotfound:
@@ -34,10 +30,13 @@ __libloadnotfound:
 __notfound:
 	ld	hl,__missingappvar
 __notfoundprint:
-	call	020174h		; bos.gui_DrawConsoleWindow
+extern bos.gui_DrawConsoleWindow
+	call	bos.gui_DrawConsoleWindow
 	ld	hl,__webaddress
-	call	0201C0h		; bos._PutS
-	jp	020170h		; bos.sys_WaitKeyCycle
+extern bos.gui_Print
+	call	bos.gui_Print
+extern bos.sys_WaitKeyCycle
+	jp	bos.sys_WaitKeyCycle
 
 
 
@@ -56,7 +55,7 @@ __webaddress:
 	db	"http://tiny.cc/clibs",$A,0
 	private	__libloadname
 __libloadname:
-	db	"/lib/LibLoad.LLL",0
+	db	"/lib/LibLoad.dll",0
 
 	section	.start
 
@@ -112,7 +111,8 @@ if __len_bss = 257
 end if
 else
 	ld	bc,__len_bss
-	call	0020194h	; _MemClear
+	call	bos._MemClear
+extern bos._MemClear
 end if
 end if
 end if
@@ -135,10 +135,10 @@ __exitsp := $-3
 	section	.cleanup
 	public	__cleanup
 __cleanup:
-	res	4,(iy+9)	; onInterrupt,(iy+onFlags)
-	set	0,(iy+3)	; graphDraw,(iy+graphFlags)
-	call	0201CCh		; _ClrLCDFull
-	call	0201D0h		; _HomeUp
+	call	bos._ClrScrn
+extern bos._ClrScrn
+	call	bos._HomeUp
+extern bos._HomeUp
 
 
 	section	.exit
