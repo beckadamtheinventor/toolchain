@@ -15,30 +15,33 @@
 # Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 #----------------------------
-VERSION := 9.0-devel
+VERSION := 9.1
 #----------------------------
 NAME ?= DEMO
 ICON ?=
 DESCRIPTION ?=
 COMPRESSED ?= NO
 ARCHIVED ?= NO
-CLEANUP ?= YES
-BSSHEAP_LOW ?= D05200
-BSSHEAP_HIGH ?= D15200
+BSSHEAP_LOW ?= D031F6
+BSSHEAP_HIGH ?= D13FD6
 STACK_HIGH ?= D1A87E
 INIT_LOC ?= D1A87F
-USE_FLASH_FUNCTIONS ?= YES
-UPPERCASE_NAME ?= YES
 OUTPUT_MAP ?= NO
 CFLAGS ?= -Wall -Wextra -Oz
-CXXFLAGS ?=
+CXXFLAGS ?= -Wall -Wextra -Oz
 LDFLAGS ?=
 SRCDIR ?= src
-OBJDIR ?= bosobj
-BINDIR ?= bosbin
+OBJDIR ?= obj
+BINDIR ?= bin
 GFXDIR ?= src/gfx
+CUSTOM_FILE_FILE ?= stdio_file.h
 DEPS ?=
-
+#----------------------------
+HAS_UPPERCASE_NAME ?= YES
+HAS_CLEANUP ?= YES
+HAS_FLASH_FUNCTIONS ?= YES
+HAS_PRINTF ?= YES
+HAS_CUSTOM_FILE ?= NO
 #----------------------------
 
 # define some common makefile things
@@ -51,6 +54,8 @@ DEBUGMODE = NDEBUG
 CCDEBUG = -g0
 LDDEBUG = 0
 LDSTATIC = 0
+DEFPRINTF =
+DEFCUSTOMFILE =
 
 # verbosity
 V ?= 0
@@ -90,7 +95,7 @@ MAKEFILE_FILE := $(lastword $(MAKEFILE_LIST))
 MKDIR = $(call NATIVEMKDR,$(call QUOTE_ARG,$(call NATIVEPATH,$1)))
 
 FASMG_FILES = $(subst $(space),$(comma) ,$(patsubst %,"%",$(subst ",\",$(subst \,\\,$(call NATIVEPATH,$1)))))#"
-LINKER_SCRIPT ?= $(CEDEV)/bos/meta/linker_script
+LINKER_SCRIPT ?= $(CEDEV)/meta/linker_script
 
 # ensure native paths
 SRCDIR := $(call NATIVEPATH,$(SRCDIR))
@@ -106,7 +111,7 @@ ICONIMG := $(wildcard $(call NATIVEPATH,$(ICON)))
 ICONSRC := $(call NATIVEPATH,$(OBJDIR)/icon.src)
 
 # startup routines
-LDCRT0 := $(call NATIVEPATH,$(CEDEV)/bos/lib/shared/crt0.src)
+LDCRT0 := $(call NATIVEPATH,$(CEDEV)/lib/shared/crt0.src)
 
 # source: http://blog.jgc.org/2011/07/gnu-make-recursive-wildcard-function.html
 rwildcard = $(foreach d,$(wildcard $1*),$(call rwildcard,$d/,$2)$(filter $(subst *,%,$2),$d))
@@ -124,7 +129,7 @@ LINK_ASMSOURCES := $(ASMSOURCES)
 
 # files created to be used for linking
 LDFILES := $(LDCRT0) $(LINK_CSOURCES) $(LINK_CPPSOURCES) $(LINK_ASMSOURCES)
-LDLIBS := $(wildcard $(CEDEV)/bos/lib/libload/*.lib)
+LDLIBS := $(wildcard $(CEDEV)/lib/libload/*.lib)
 
 # check if there is an icon present that to convert
 ifneq ($(ICONIMG),)
@@ -140,7 +145,7 @@ endif
 endif
 
 # check if default cleanup code should be added
-ifeq ($(CLEANUP),YES)
+ifeq ($(HAS_CLEANUP),YES)
 LDREQUIRE += -i $(call QUOTE_ARG,require __cleanup)
 endif
 
@@ -150,29 +155,49 @@ GFXCMD := cd $(GFXDIR) && $(CONVIMG)
 endif
 
 # determine output target flags
-CONVBINFLAGS += --oformat bin
-
+ifeq ($(ARCHIVED),YES)
+CONVBINFLAGS += --archive
+endif
+ifeq ($(COMPRESSED),YES)
+CONVBINFLAGS += --oformat 8xp-auto-decompress
+else
+CONVBINFLAGS += --oformat 8xp
+endif
+ifeq ($(HAS_UPPERCASE_NAME),YES)
+CONVBINFLAGS += --uppercase
+endif
+CONVBINFLAGS += --name $(NAME)
 
 # output debug map file
 ifeq ($(OUTPUT_MAP),YES)
 LDMAPFLAG := -i map
 endif
 
+# selectively include embedded printf functionality
+ifeq ($(HAS_PRINTF),YES)
+DEFPRINTF := -DHAS_PRINTF=1
+endif
+
+# support custom file io configuration
+ifeq ($(HAS_CUSTOM_FILE),YES)
+DEFCUSTOMFILE := -DHAS_CUSTOM_FILE=1 -DCUSTOM_FILE_FILE=\"$(CUSTOM_FILE_FILE)\"
+endif
+
 # choose static or linked flash functions
-ifeq ($(USE_FLASH_FUNCTIONS),YES)
+ifeq ($(HAS_FLASH_FUNCTIONS),YES)
 LDSTATIC := 1
 endif
 
 # define the c/c++ flags used by clang
-EZCFLAGS = -nostdinc -isystem $(CEDEV)/bos/include -Dinterrupt="__attribute__((__interrupt__))"
-EZCFLAGS += -Wno-main-return-type -Xclang -fforce-mangle-main-argc-argv -D_EZ80 -D$(DEBUGMODE) $(CCDEBUG)
+EZCFLAGS = -nostdinc -isystem $(CEDEV)/include -I$(SRCDIR) -Dinterrupt="__attribute__((__interrupt__))"
+EZCFLAGS += -Wno-main-return-type -Xclang -fforce-mangle-main-argc-argv -mllvm -profile-guided-section-prefix=false -D_EZ80 -D$(DEBUGMODE) $(DEFPRINTF) $(DEFCUSTOMFILE) $(CCDEBUG)
 EZCXXFLAGS = $(EZCFLAGS) -fno-exceptions -fno-rtti $(CXXFLAGS)
 EZCFLAGS += $(CFLAGS)
 
 # these are the fasmg linker flags
 FASMFLAGS = \
 	-n \
-	$(call QUOTE_ARG,$(call NATIVEPATH,$(CEDEV)/bos/meta/ld.alm)) \
+	$(call QUOTE_ARG,$(call NATIVEPATH,$(CEDEV)/meta/ld.alm)) \
 	-i $(call QUOTE_ARG,DEBUG := $(LDDEBUG)) \
 	-i $(call QUOTE_ARG,STATIC := $(LDSTATIC)) \
 	-i $(call QUOTE_ARG,include $(call FASMG_FILES,$(LINKER_SCRIPT))) \

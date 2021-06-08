@@ -40,7 +40,7 @@ uint8_t kb_AnyKey(void);
 
 /**
  * Resets the keyboard before returning to the OS.
- * @note Only use the keyboard timers or number of rows have been modified.
+ * @note Only use if the keyboard timers or number of rows have been modified.
  */
 void kb_Reset(void);
 
@@ -89,25 +89,84 @@ typedef enum {
 /**
  * Keypad Data registers
  *
+ * \verbatim embed:rst:leading-asterisk
+ *
+ * +--------+------------+------------+------------+------------+------------+------------+------------+------------+
  * | Offset | Bit 0      | Bit 1      | Bit 2      | Bit 3      |  Bit 4     |  Bit 5     |  Bit 6     | Bit 7      |
- * | -------| ---------- | ---------- | ---------- | ---------- | ---------- | ---------- | ---------- | ---------- |
+ * +========+============+============+============+============+============+============+============+============+
  * | 1      | kb_Graph   | kb_Trace   | kb_Zoom    | kb_Window  | kb_Yequ    | kb_2nd     | kb_Mode    | kb_Del     |
+ * +--------+------------+------------+------------+------------+------------+------------+------------+------------+
  * | 2      |            | kb_Sto     | kb_Ln      | kb_Log     | kb_Square  | kb_Recip   | kb_Math    | kb_Alpha   |
+ * +--------+------------+------------+------------+------------+------------+------------+------------+------------+
  * | 3      | kb_0       | kb_1       | kb_4       | kb_7       | kb_Comma   | kb_Sin     | kb_Apps    | kb_GraphVar|
+ * +--------+------------+------------+------------+------------+------------+------------+------------+------------+
  * | 4      | kb_DecPnt  | kb_2       | kb_5       | kb_8       | kb_LParen  | kb_Cos     | kb_Prgm    | kb_Stat    |
+ * +--------+------------+------------+------------+------------+------------+------------+------------+------------+
  * | 5      | kb_Chs     | kb_3       | kb_6       | kb_9       | kb_RParen  | kb_Tan     | kb_Vars    |            |
+ * +--------+------------+------------+------------+------------+------------+------------+------------+------------+
  * | 6      | kb_Enter   | kb_Add     | kb_Sub     | kb_Mul     | kb_Div     | kb_Power   | kb_Clear   |            |
+ * +--------+------------+------------+------------+------------+------------+------------+------------+------------+
  * | 7      | kb_Down    | kb_Left    | kb_Right   | kb_Up      |            |            |            |            |
- * 
- * These data registers can be indexed just like an array. For example, if you want to check the status of the '2nd' key:
+ * +--------+------------+------------+------------+------------+------------+------------+------------+------------+
+ *
+ * \endverbatim
+ *
+ * These data registers can be indexed as a normal array. For example, to check the status of the '2nd' key:
  * @code
  *  if (kb_Data[1] & kb_2nd) {
  *      ...
  *  }
  * @endcode
+ * @see kb_On
  */
 #define kb_Data \
 (uint8_t)((volatile uint16_t*)0xF50010)
+
+/**
+ * ON key signal.
+ * @note Scanning mode does not matter.
+ * @note The ON key is not wired as part of the normal key matrix. The ON key must be checked separately from the
+ * other keys with kb_On:
+ * @code
+ *  int main(void) {
+ *      kb_DisableOnLatch();
+ *      ...
+ *      if (kb_On) {
+ *          ...
+ *      }
+ *  }
+ * @endcode
+ * @see kb_DisableOnLatch kb_EnableOnLatch kb_ClearOnLatch
+ */
+#define kb_On \
+(*(volatile uint8_t*)0xF00020 & 1)
+
+/**
+ * Causes kb_On to latch when the ON is key pressed: once the ON key is pressed, kb_On will remain true until
+ * reset with kb_ClearOnLatch(). This may be useful if you want to check the ON key occasionally, for example
+ * as a break signal.
+ * @warning This defaults to whatever the last program set this to, so be sure to set it explicitly.
+ * @see kb_DisableOnLatch kb_ClearOnLatch
+ */
+#define kb_EnableOnLatch() \
+((*(volatile uint8_t*)0xF0002C) |= 1)
+
+/**
+ * Disables ON key latching behavior.
+ * @warning This defaults to whatever the last program set this to, so be sure to set it explicitly.
+ * @see kb_EnableOnLatch
+ */
+#define kb_DisableOnLatch() \
+((*(volatile uint8_t*)0xF0002C) &= ~1)
+
+/**
+ * When ON key latching has been enabled with kb_EnableOnLatch(), this will reset kb_On back to false
+ * (assuming the user is no longer pressing ON).
+ * @note This may persist between program runs, so be to sure to disable as needed.
+ * @see kb_EnableOnLatch
+ */
+#define kb_ClearOnLatch() \
+((*(volatile uint8_t*)0xF00028) = 1)
 
 /**
  * Different available interrupt signals

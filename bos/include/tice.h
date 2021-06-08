@@ -34,6 +34,7 @@ extern "C" {
 do { \
     asm_ClrLCD(); \
     asm_HomeUp(); \
+    asm_DrawStatusBar(); \
 } while (0)
 
 /**

@@ -521,9 +521,9 @@ void gfx_SetDefaultPalette(gfx_mode_t mode);
 /**
  * Sets entries in the palette
  *
- * @param palette Pointer to palette to use
- * @param size Size of palette to store
- * @param offset Offset in bytes to start at (Generally set to 0).
+ * @param palette Pointer to palette to set.
+ * @param size Size of palette in bytes.
+ * @param offset Palette index to insert at.
  */
 void gfx_SetPalette(const void *palette,
                     uint24_t size,
@@ -1682,7 +1682,7 @@ gfx_ConvertToNewRLETSprite(sprite_in, malloc)
  * codewords. If bit 7 of that is zero, the byte immediately after it is a
  * literal and can be read in as sprite height. Otherwise, the bits that follows
  * indicates a codeword, making sprite height the same as width.
- * 
+ *
  * @param zx7_sprite ZX7-compressed sprite
  * @return Size, in bytes, of decompressed sprite
 */
@@ -1707,7 +1707,7 @@ gfx_ConvertToNewRLETSprite(sprite_in, malloc)
 #define gfx_BlitArea    _Pragma("GCC warning \"'gfx_BlitArea' is deprecated, use 'gfx_BlitRectangle' instead\"") gfx_BlitRectangle
 #define gfx_lcdWidth    (320)
 #define gfx_lcdHeight   (240)
-/* @cond */
+/* @endcond */
 
 #ifdef __cplusplus
 }

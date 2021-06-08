@@ -1,502 +1,292 @@
 
-	public bos.boot_os
-	public bos.handle_interrupt
-	public bos.handle_safeop
-	public bos.handle_offsetcall
-	public bos.sys_ExecuteFile
-	public bos.os_GetOSInfo
-	public bos.fs_OpenFile
-	public bos.fs_GetSectorAddress
-	public bos.fs_CheckDirExists
-	public bos.fs_GetPathLastName
-	public bos.fs_CopyFileName
-	public bos.fs_Read
-	public bos.fs_Write
-	public bos.sys_AddHLAndA
-	public bos.sys_AnyKey
-	public bos.sys_FreeAll
-	public bos.sys_GetKey
-	public bos.sys_KbScan
-	public bos.sys_Malloc
-	public bos.sys_MemCmp
-	public bos.sys_MemSet
-	public bos.sys_Mult24x8
-	public bos.sys_WaitKey
-	public bos.sys_WaitKeyCycle
-	public bos.gui_DrawConsoleWindow
-	public bos.gui_Input
-	public bos.gui_NewLine
-	public bos.gui_Print
-	public bos.gui_PrintInt
-	public bos.gui_Scroll
-	public bos.gfx_BlitBuffer
-	public bos.gfx_PrintString
-	public bos._MemClear
-	public bos._PushOP1
-	public bos._PopOP1
-	public bos._Mov9ToOP1
-	public bos._CpHLDE
-	public bos._Mov8b
-	public bos._ChkFindSym
-	public bos._LoadDEInd_s
-	public bos._EnoughMem
-	public bos._InsertMem
-	public bos._SetHLUTo0
-	public bos._PutS
-	public bos._GetCSC
-	public bos._NewLine
-	public bos._ClrScrn
-	public bos._HomeUp
-	public bos._ErrMemory
-	public bos._DrawStatusBar
-	public bos._os_GetSystemInfo
-	public bos._UsbPowerVbus
-	public bos._UsbUnpowerVbus
-	public bos.sys_EraseFlashSector
-	public bos.sys_FlashUnlock
-	public bos.sys_FlashLock
-	public bos.fs_CreateFile
-	public bos.strupper
-	public bos.strlower
-	public bos.fs_AbsPath
-	public bos.fs_MultByBytesPerSector
-	public bos._LoadLibraryOP1
-	public bos.fs_OpenFileInDir
-	public bos.fs_SetSize
-	public bos.fs_WriteFile
-	public bos.sys_HLToString
-	public bos.fs_DeleteFile
-	public bos._DelVar
-	public bos._CreateVar
-	public bos.gui_InputNoClear
-	public bos.fs_InitClusterMap
-	public bos.sys_WriteFlash
-	public bos.sys_WriteFlashA
-	public bos.sys_WriteFlashFull
-	public bos.sys_WriteFlashByteFull
-	public bos.fs_ParentDir
-	public bos.fs_StrToFileEntry
-	public bos.fs_DirList
-	public bos.sys_Free
-	public bos.sys_CallExecuteFile
-	public bos.sys_JumpExecuteFile
-	public bos.sys_InitDevice
-	public bos.sys_DeinitDevice
-	public bos.sys_GetDeviceAddress
-	public bos.sys_ReadDevice
-	public bos.sys_WriteDevice
-	public bos.fs_GetSector
-	public bos.fs_WriteByte
-	public bos.fs_RenameFile
-	public bos._SetCursorPos
-	public bos.fs_CreateDir
-	public bos.gfx_BufClear
-	public bos.gfx_LcdClear
-	public bos.fs_SanityCheck
-	public bos.sys_SetupOnInterruptHandler
-	public bos.gui_PrintChar
-	public bos.gfx_SetDraw
-	public bos.gui_PrintString
-	public bos.gui_PrintLine
-	public bos.gui_PrintUInt
-	public bos.sys_WriteFlashFullRam
-	public bos.sys_WriteFlashByteFullRam
-	public bos.fs_GetFilePtr
-	public bos.sys_ExecuteFileFromPtr
-	public bos.sys_ExecuteFileHL
-	public bos.sys_TurnOff
-	public bos.sys_NextProcessId
-	public bos.sys_PrevProcessId
-	public bos.sys_FreeProcessId
-	public bos.fs_GarbageCollect
-	public bos.gfx_SwapTextColors
-	public bos.fs_WriteNewFile
-	public bos.gfx_SetFont
-	public bos.gfx_SetDefaultFont
-	public bos.sys_FreeRunningProcessId
-	public bos.util_Zx7Decompress
-	public bos.gfx_Compute
-	public bos.gfx_FillRectangle
-	public bos.gfx_FillScreen
-	public bos.gfx_GetFontPtr
-	public bos.gfx_HorizLine
-	public bos.gfx_InitStdPalette
-	public bos.gfx_NextLine
-	public bos.gfx_PrintChar
-	public bos.gfx_PrintHexA
-	public bos.gfx_PrintUInt
-	public bos.gfx_Rectangle
-	public bos.gfx_Set8bpp
-	public bos.gfx_Set16bpp
-	public bos.gfx_SetTextXY
-	public bos.gfx_Sprite
-	public bos.gfx_Sprite2x
-	public bos.gfx_VertLine
-	public bos.sys_Malloc32Align32
-	public bos.sys_Malloc64Align256
-	public bos.gfx_PrintStringXY
-	public bos.gfx_GetTextX
-	public bos.gfx_GetTextY
-	public bos.fs_CheckWritable
-	public bos.fs_CheckWritableFD
-	public bos.sys_OpenFileInPath
-	public bos.LCD_CTRL?
-	public bos.LCD_VRAM?
-	public bos.LCD_BUFFER?
-	public bos.LCD_WIDTH?
-	public bos.LCD_HEIGHT?
-	public bos.LCD_8BPP?
-	public bos.LCD_16BPP?
-	public bos.TEXT_MAX_ROW
-	public bos.RAM_START
-	public bos.flag_start
-	public bos.currow?
-	public bos.curcol?
-	public bos.lcd_bg_color
-	public bos.lcd_text_fg
-	public bos.lcd_text_bg
-	public bos.color_primary
-	public bos.font_spacing
-	public bos.font_data
-	public bos.lcd_x
-	public bos.lcd_y
-	public bos.free_RAM_ptr
-	public bos.remaining_free_RAM
-	public bos.cursor_color
-	public bos.console_col
-	public bos.op_stack_ptr
-	public bos.console_line
-	public bos.bottom_of_RAM
-	public bos.flashStatusByte
-	public bos.filesystem_driver
-	public bos.on_interrupt_handler
-	public bos.cur_lcd_buffer
-	public bos.running_process_id
-	public bos.lcd_text_fg2
-	public bos.lcd_text_bg2
-	public bos.running_program_ptr
-	public bos.ScrapMem2
-	public bos.ScrapByte
-	public bos.ScrapWord
-	public bos.ScrapMem
-	public bos.ExecutingFileFd
-	public bos.open_files_table
-	public bos.InputBuffer
-	public bos.gfx_string_temp
-	public bos.current_working_dir
-	public bos.argument_stack_top
-	public bos.op_stack_top
-	public bos.gui_cursor_x
-	public bos.gui_cursor_y
-	public bos.fsOP1
-	public bos.fsOP2
-	public bos.fsOP3
-	public bos.fsOP4
-	public bos.fsOP5
-	public bos.fsOP6
-	public bos.current_cluster_map
-	public bos.argument_stack_current
-	public bos.asm_prgm_size
-	public bos.top_of_UserMem
-	public bos.SaveSP
-	public bos.current_sectors_per_cluster
-	public bos.usb_sector_buffer
-	public bos.malloc_cache
-	public bos.usbRAM
-	public bos.safeRAM
-	public bos.safeRAM_len
-	public bos.reservedRAM
-	public bos.reservedRAM_len
-	public bos.bos_Stackbot
-	public bos.bos_UserMem
-	public bos.driverExecRAM
-	public bos.driverExecRAM_len
-	public bos.bottom_of_malloc_RAM
-	public bos.top_of_RAM
-	public bos.thread_map
-	public bos.thread_temp_save
-	public bos.current_thread
-	public bos.thread_control
-	public bos.thread_memory_end
-	public bos.start_of_user_archive
-	public bos.end_of_user_archive
-	public bos.fd_readonly
-	public bos.fd_hidden
-	public bos.fd_system
-	public bos.fd_subfile
-	public bos.fd_subdir
-	public bos.fd_device
-	public bos.fd_elevated
-	public bos.fsentry_endofdir
-	public bos.fsentry_dot
-	public bos.fsentry_deleted
-	public bos.fsentry_longfilename
-	public bos.fsentry_unlisted
-	public bos.fsentry_endofdir2
-	public bos.fsentry_filename
-	public bos.fsentry_filename.len
-	public bos.fsentry_fileext
-	public bos.fsentry_fileext.len
-	public bos.fsentry_fileattr
-	public bos.fsentry_fileattr.len
-	public bos.fsentry_filesector
-	public bos.fsentry_filesector.len
-	public bos.fsentry_filelen
-	public bos.fsentry_filelen.len
-	public bos.bIsFlashUnlocked
-	public bos.bKeepFlashUnlocked
-	public bos.mIsFlashUnlocked
-	public bos.mKeepFlashUnlocked
-
-
-
-	bos.boot_os                         := $20108
-	bos.handle_interrupt                := $2010C
-	bos.handle_safeop                   := $20118
-	bos.handle_offsetcall               := $2011C
-	bos.sys_ExecuteFile                 := $20124
-	bos.os_GetOSInfo                    := $20128
-	bos.fs_OpenFile                     := $2012C
-	bos.fs_GetSectorAddress             := $20130
-	bos.fs_CheckDirExists               := $20134
-	bos.fs_GetPathLastName              := $20138
-	bos.fs_CopyFileName                 := $2013C
-	bos.fs_Read                         := $20140
-	bos.fs_Write                        := $20144
-	bos.sys_AddHLAndA                   := $20148
-	bos.sys_AnyKey                      := $2014C
-	bos.sys_FreeAll                     := $20150
-	bos.sys_GetKey                      := $20154
-	bos.sys_KbScan                      := $20158
-	bos.sys_Malloc                      := $2015C
-	bos.sys_MemCmp                      := $20160
-	bos.sys_MemSet                      := $20164
-	bos.sys_Mult24x8                    := $20168
-	bos.sys_WaitKey                     := $2016C
-	bos.sys_WaitKeyCycle                := $20170
-	bos.gui_DrawConsoleWindow           := $20174
-	bos.gui_Input                       := $20178
-	bos.gui_NewLine                     := $2017C
-	bos.gui_Print                       := $20180
-	bos.gui_PrintInt                    := $20184
-	bos.gui_Scroll                      := $20188
-	bos.gfx_BlitBuffer                  := $2018C
-	bos.gfx_PrintString                 := $20190
-	bos._MemClear                       := $20194
-	bos._PushOP1                        := $20198
-	bos._PopOP1                         := $2019C
-	bos._Mov9ToOP1                      := $201A0
-	bos._CpHLDE                         := $201A4
-	bos._Mov8b                          := $201A8
-	bos._ChkFindSym                     := $201AC
-	bos._LoadDEInd_s                    := $201B0
-	bos._EnoughMem                      := $201B4
-	bos._InsertMem                      := $201B8
-	bos._SetHLUTo0                      := $201BC
-	bos._PutS                           := $201C0
-	bos._GetCSC                         := $201C4
-	bos._NewLine                        := $201C8
-	bos._ClrScrn                        := $201CC
-	bos._HomeUp                         := $201D0
-	bos._ErrMemory                      := $201D4
-	bos._DrawStatusBar                  := $201D8
-	bos._os_GetSystemInfo               := $201DC
-	bos._UsbPowerVbus                   := $201E0
-	bos._UsbUnpowerVbus                 := $201E4
-	bos.sys_EraseFlashSector            := $201E8
-	bos.sys_FlashUnlock                 := $201EC
-	bos.sys_FlashLock                   := $201F0
-	bos.fs_CreateFile                   := $201F4
-	bos.strupper                        := $201F8
-	bos.strlower                        := $201FC
-	bos.fs_AbsPath                      := $20200
-	bos.fs_MultByBytesPerSector         := $20204
-	bos._LoadLibraryOP1                 := $20208
-	bos.fs_OpenFileInDir                := $2020C
-	bos.fs_SetSize                      := $20210
-	bos.fs_WriteFile                    := $20214
-	bos.sys_HLToString                  := $20218
-	bos.fs_DeleteFile                   := $2021C
-	bos._DelVar                         := $20220
-	bos._CreateVar                      := $20224
-	bos.gui_InputNoClear                := $20228
-	bos.fs_InitClusterMap               := $2022C
-	bos.sys_WriteFlash                  := $20230
-	bos.sys_WriteFlashA                 := $20234
-	bos.sys_WriteFlashFull              := $20238
-	bos.sys_WriteFlashByteFull          := $2023C
-	bos.fs_ParentDir                    := $20240
-	bos.fs_StrToFileEntry               := $20244
-	bos.fs_DirList                      := $20248
-	bos.sys_Free                        := $2024C
-	bos.sys_CallExecuteFile             := $20250
-	bos.sys_JumpExecuteFile             := $20254
-	bos.sys_InitDevice                  := $20258
-	bos.sys_DeinitDevice                := $2025C
-	bos.sys_GetDeviceAddress            := $20260
-	bos.sys_ReadDevice                  := $20264
-	bos.sys_WriteDevice                 := $20268
-	bos.fs_GetSector                    := $2026C
-	bos.fs_WriteByte                    := $20270
-	bos.fs_RenameFile                   := $20274
-	bos._SetCursorPos                   := $20278
-	bos.fs_CreateDir                    := $2027C
-	bos.gfx_BufClear                    := $20280
-	bos.gfx_LcdClear                    := $20284
-	bos.fs_SanityCheck                  := $20288
-	bos.sys_SetupOnInterruptHandler     := $2028C
-	bos.gui_PrintChar                   := $20290
-	bos.gfx_SetDraw                     := $20294
-	bos.gui_PrintString                 := $20298
-	bos.gui_PrintLine                   := $2029C
-	bos.gui_PrintUInt                   := $202A0
-	bos.sys_WriteFlashFullRam           := $202A4
-	bos.sys_WriteFlashByteFullRam       := $202A8
-	bos.fs_GetFilePtr                   := $202AC
-	bos.sys_ExecuteFileFromPtr          := $202B0
-	bos.sys_ExecuteFileHL               := $202B4
-	bos.sys_TurnOff                     := $202B8
-	bos.sys_NextProcessId               := $202BC
-	bos.sys_PrevProcessId               := $202C0
-	bos.sys_FreeProcessId               := $202C4
-	bos.fs_GarbageCollect               := $202C8
-	bos.gfx_SwapTextColors              := $202CC
-	bos.fs_WriteNewFile                 := $202D0
-	bos.gfx_SetFont                     := $202D4
-	bos.gfx_SetDefaultFont              := $202D8
-	bos.sys_FreeRunningProcessId        := $202DC
-	bos.util_Zx7Decompress              := $202E0
-	bos.gfx_Compute                     := $202E8
-	bos.gfx_FillRectangle               := $202EC
-	bos.gfx_FillScreen                  := $202F0
-	bos.gfx_GetFontPtr                  := $202F4
-	bos.gfx_HorizLine                   := $202F8
-	bos.gfx_InitStdPalette              := $202FC
-	bos.gfx_NextLine                    := $20300
-	bos.gfx_PrintChar                   := $20304
-	bos.gfx_PrintHexA                   := $20308
-	bos.gfx_PrintUInt                   := $2030C
-	bos.gfx_Rectangle                   := $20310
-	bos.gfx_Set8bpp                     := $20314
-	bos.gfx_Set16bpp                    := $20318
-	bos.gfx_SetTextXY                   := $2031C
-	bos.gfx_Sprite                      := $20320
-	bos.gfx_Sprite2x                    := $20324
-	bos.gfx_VertLine                    := $20328
-	bos.sys_Malloc32Align32             := $2032C
-	bos.sys_Malloc64Align256            := $20330
-	bos.gfx_PrintStringXY               := $20334
-	bos.gfx_GetTextX                    := $20338
-	bos.gfx_GetTextY                    := $2033C
-	bos.fs_CheckWritable                := $20340
-	bos.fs_CheckWritableFD              := $20344
-	bos.sys_OpenFileInPath              := $20348
-	bos.LCD_PAL?    := 0E30200h
-	bos.LCD_CTRL?   := 0E30018h
-	bos.LCD_VRAM?   := 0D40000h
-	bos.LCD_BUFFER? := 0D52C00h ;LCD_VRAM + LCD_WIDTH*LCD_HEIGHT
-	bos.LCD_WIDTH?  := 320
-	bos.LCD_HEIGHT? := 240
-	bos.LCD_8BPP?   := $27
-	bos.LCD_16BPP?  := $2D
-	bos.TEXT_MAX_ROW    := 231
-	bos.RAM_START  := 0D00400h
-	bos.flag_start             := $D00000
-	bos.currow?                := bos.console_line
-	bos.curcol?                := bos.console_col
-	bos.lcd_bg_color           := $D00210
-	bos.lcd_text_fg            := $D00211
-	bos.lcd_text_bg            := $D00212
-	bos.color_primary          := $D00213
-	bos.font_spacing           := $D00214
-	bos.font_data              := $D00217
-	bos.lcd_x                  := $D0021A
-	bos.lcd_y                  := $D0021D
-	bos.free_RAM_ptr           := $D00220
-	bos.remaining_free_RAM     := $D00223
-	bos.cursor_color           := $D00226
-	bos.console_col            := $D00227
-	bos.op_stack_ptr           := $D00228
-	bos.console_line           := $D0022C
-	bos.bottom_of_RAM          := $D0022D
-	bos.flashStatusByte        := $D00230
-	bos.filesystem_driver      := $D00231
-	bos.on_interrupt_handler   := $D00235 ;3 bytes. Jump to on key interrupt handler. Byte preceeding this must be $C3 or $C9
-	bos.cur_lcd_buffer         := $D00238 ;3 bytes. Points to current LCD buffer
-	bos.running_process_id     := $D0023B ;1 byte. Current process ID (used for per-program memory allocation)
-	bos.lcd_text_fg2           := $D0023C
-	bos.lcd_text_bg2           := $D0023D
-	bos.running_program_ptr    := $D0023E ;3 bytes. Stores pointer to currently running program
-	bos.ScrapMem2              := $D00279
-	bos.ScrapByte              := $D0027C
-	bos.ScrapWord              := $D0027D
-	bos.ScrapMem               := $D0027D
-	bos.ExecutingFileFd        := $D00280 ; 3 bytes. Pointer to currently executing file descriptor. -1 if file not found. 0 if file descriptor is not applicable
-	bos.open_files_table       := $D00300
-	bos.InputBuffer            := $D00400
-	bos.gfx_string_temp        := $D00500
-	bos.current_working_dir    := $D00510
-	bos.argument_stack_top     := $D00670 ;96 bytes downward
-	bos.op_stack_top           := $D00870 ;512 bytes downward
-	bos.gui_cursor_x           := $D00870
-	bos.gui_cursor_y           := $D00873
-	bos.fsOP1                  := $D01000
-	bos.fsOP2                  := $D01010
-	bos.fsOP3                  := $D01020
-	bos.fsOP4                  := $D01030
-	bos.fsOP5                  := $D01040
-	bos.fsOP6                  := $D01050
-	bos.current_cluster_map    := $D01080 ;3 bytes
-	bos.argument_stack_current := $D01083 ;3 bytes
-	bos.asm_prgm_size          := $D01086 ;3 bytes
-	bos.top_of_UserMem         := $D01089 ;3 bytes
-	bos.SaveSP                 := $D01092 ;3 bytes, saves SP when running programs.
-	bos.current_sectors_per_cluster := $D01095 ;1 byte. Number of sectors per cluster in last drive where fs_DataSection or fs_RootDir has been called on it.
-	bos.usb_sector_buffer      := $D02000 ;512 bytes
-	bos.malloc_cache           := $D03000 ;4096 bytes
-	bos.usbRAM                 := $D05080 ;256 bytes, should not be tampered with while /dev/mnt or /dev/usb are active
-	bos.safeRAM                := $D05200 ; 65536 bytes scrap RAM
-	bos.safeRAM_len            := 65536
-	bos.reservedRAM            := $D15200 ; 2048 bytes reserved RAM
-	bos.reservedRAM_len        := 2048
-	bos.bos_Stackbot           := $D1A87C
-	bos.bos_UserMem            := $D1A881
-	bos.driverExecRAM          := $D2F000 ; 4096 bytes RAM reserved for driver code
-	bos.driverExecRAM_len      := 4096
-	bos.bottom_of_malloc_RAM   := $D30000
-	bos.top_of_RAM             := $D40000
-	bos.thread_map             := $D02800 ; thread map. 256 threads. Active threads have bit 7 set.
-	bos.thread_temp_save       := $D03000 ; temporary save location for registers when a thread switch interrupt is triggered. 32 bytes per thread, 256 threads = 8192 bytes.
-	bos.current_thread         := $D05000 ; currently running thread ID
-	bos.thread_control         := $D05001 ; zero if threading is disabled
-	bos.thread_memory_end      := $D05002 ; end of thread memory
-	bos.start_of_user_archive  := $040000 ;sector $04
-	bos.end_of_user_archive    := $3B0000 ;sector $3B, start of certificate
-	bos.fd_readonly   := 0
-	bos.fd_hidden     := 1
-	bos.fd_system     := 2
-	bos.fd_subfile    := 3
-	bos.fd_subdir     := 4
-	bos.fd_device     := 5
-	bos.fd_elevated   := 7
-	bos.fsentry_endofdir        := $00
-	bos.fsentry_dot             := $2E
-	bos.fsentry_deleted         := $F0
-	bos.fsentry_longfilename    := $F1
-	bos.fsentry_unlisted        := $F2
-	bos.fsentry_endofdir2       := $FF
-	bos.fsentry_filename            := $00
-	bos.fsentry_filename.len        := 8
-	bos.fsentry_fileext             := $08
-	bos.fsentry_fileext.len         := 3
-	bos.fsentry_fileattr            := $0B
-	bos.fsentry_fileattr.len        := 1
-	bos.fsentry_filesector          := $0C
-	bos.fsentry_filesector.len      := 2
-	bos.fsentry_filelen             := $0E
-	bos.fsentry_filelen.len         := 2
-	bos.bIsFlashUnlocked     := 0
-	bos.bKeepFlashUnlocked   := 1
-	bos.mIsFlashUnlocked     := 1
-	bos.mKeepFlashUnlocked   := 2
-
+; BOS jump table functions
+	public boot_os
+	public handle_interrupt
+	public handle_safeop
+	public handle_offsetcall
+	public sys_ExecuteFile
+	public os_GetOSInfo
+	public fs_OpenFile
+	public fs_GetSectorAddress
+	public fs_CheckDirExists
+	public fs_GetPathLastName
+	public fs_CopyFileName
+	public fs_Read
+	public fs_Write
+	public sys_AddHLAndA
+	public sys_AnyKey
+	public sys_FreeAll
+	public sys_GetKey
+	public sys_KbScan
+	public sys_Malloc
+	public sys_MemCmp
+	public sys_MemSet
+	public sys_Mult24x8
+	public sys_WaitKey
+	public sys_WaitKeyCycle
+	public gui_DrawConsoleWindow
+	public gui_Input
+	public gui_NewLine
+	public gui_Print
+	public gui_PrintInt
+	public gui_Scroll
+	public gfx_BlitBuffer
+	public gfx_PrintString
+	public _MemClear
+	public _PushOP1
+	public _PopOP1
+	public _Mov9ToOP1
+	public _CpHLDE
+	public _Mov8b
+	public _ChkFindSym
+	public _LoadDEInd_s
+	public _EnoughMem
+	public _InsertMem
+	public _SetHLUTo0
+	public _PutS
+	public _GetCSC
+	public _NewLine
+	public _ClrScrn
+	public _HomeUp
+	public _ErrMemory
+	public _DrawStatusBar
+	public _os_GetSystemInfo
+	public _UsbPowerVbus
+	public _UsbUnpowerVbus
+	public sys_EraseFlashSector
+	public sys_FlashUnlock
+	public sys_FlashLock
+	public fs_CreateFile
+	public strupper
+	public strlower
+	public fs_AbsPath
+	public fs_MultByBytesPerSector
+	public _LoadLibraryOP1
+	public fs_OpenFileInDir
+	public fs_SetSize
+	public fs_WriteFile
+	public sys_HLToString
+	public fs_DeleteFile
+	public _DelVar
+	public _CreateVar
+	public gui_InputNoClear
+	public fs_InitClusterMap
+	public sys_WriteFlash
+	public sys_WriteFlashA
+	public sys_WriteFlashFull
+	public sys_WriteFlashByteFull
+	public fs_ParentDir
+	public fs_StrToFileEntry
+	public fs_DirList
+	public sys_Free
+	public sys_CallExecuteFile
+	public sys_JumpExecuteFile
+	public sys_InitDevice
+	public sys_DeinitDevice
+	public sys_GetDeviceAddress
+	public sys_ReadDevice
+	public sys_WriteDevice
+	public fs_GetSector
+	public fs_WriteByte
+	public fs_RenameFile
+	public _SetCursorPos
+	public fs_CreateDir
+	public gfx_BufClear
+	public gfx_LcdClear
+	public fs_SanityCheck
+	public sys_SetupOnInterruptHandler
+	public gui_PrintChar
+	public gfx_SetDraw
+	public gui_PrintString
+	public gui_PrintLine
+	public gui_PrintUInt
+	public sys_WriteFlashFullRam
+	public sys_WriteFlashByteFullRam
+	public fs_GetFilePtr
+	public sys_ExecuteFileFromPtr
+	public sys_ExecuteFileHL
+	public sys_TurnOff
+	public sys_NextProcessId
+	public sys_PrevProcessId
+	public sys_FreeProcessId
+	public fs_GarbageCollect
+	public gfx_SwapTextColors
+	public fs_WriteNewFile
+	public gfx_SetFont
+	public gfx_SetDefaultFont
+	public sys_FreeRunningProcessId
+	public util_Zx7Decompress
+	public gfx_Compute
+	public gfx_FillRectangle
+	public gfx_FillScreen
+	public gfx_GetFontPtr
+	public gfx_HorizLine
+	public gfx_InitStdPalette
+	public gfx_NextLine
+	public gfx_PrintChar
+	public gfx_PrintHexA
+	public gfx_PrintUInt
+	public gfx_Rectangle
+	public gfx_Set8bpp
+	public gfx_Set16bpp
+	public gfx_SetTextXY
+	public gfx_Sprite
+	public gfx_Sprite2x
+	public gfx_VertLine
+	public sys_Malloc32Align32
+	public sys_Malloc64Align256
+	public gfx_PrintStringXY
+	public gfx_GetTextX
+	public gfx_GetTextY
+	public fs_CheckWritable
+	public fs_CheckWritableFD
+	public sys_OpenFileInPath
+	public sys_VarString
+	public fs_GetFreeSpace
+	public fs_GetFDPtr
+	public fs_GetFDLen
+boot_os                         := $20108
+handle_interrupt                := $2010C
+handle_safeop                   := $20118
+handle_offsetcall               := $2011C
+sys_ExecuteFile                 := $20124
+os_GetOSInfo                    := $20128
+fs_OpenFile                     := $2012C
+fs_GetSectorAddress             := $20130
+fs_CheckDirExists               := $20134
+fs_GetPathLastName              := $20138
+fs_CopyFileName                 := $2013C
+fs_Read                         := $20140
+fs_Write                        := $20144
+sys_AddHLAndA                   := $20148
+sys_AnyKey                      := $2014C
+sys_FreeAll                     := $20150
+sys_GetKey                      := $20154
+sys_KbScan                      := $20158
+sys_Malloc                      := $2015C
+sys_MemCmp                      := $20160
+sys_MemSet                      := $20164
+sys_Mult24x8                    := $20168
+sys_WaitKey                     := $2016C
+sys_WaitKeyCycle                := $20170
+gui_DrawConsoleWindow           := $20174
+gui_Input                       := $20178
+gui_NewLine                     := $2017C
+gui_Print                       := $20180
+gui_PrintInt                    := $20184
+gui_Scroll                      := $20188
+gfx_BlitBuffer                  := $2018C
+gfx_PrintString                 := $20190
+_MemClear                       := $20194
+_PushOP1                        := $20198
+_PopOP1                         := $2019C
+_Mov9ToOP1                      := $201A0
+_CpHLDE                         := $201A4
+_Mov8b                          := $201A8
+_ChkFindSym                     := $201AC
+_LoadDEInd_s                    := $201B0
+_EnoughMem                      := $201B4
+_InsertMem                      := $201B8
+_SetHLUTo0                      := $201BC
+_PutS                           := $201C0
+_GetCSC                         := $201C4
+_NewLine                        := $201C8
+_ClrScrn                        := $201CC
+_HomeUp                         := $201D0
+_ErrMemory                      := $201D4
+_DrawStatusBar                  := $201D8
+_os_GetSystemInfo               := $201DC
+_UsbPowerVbus                   := $201E0
+_UsbUnpowerVbus                 := $201E4
+sys_EraseFlashSector            := $201E8
+sys_FlashUnlock                 := $201EC
+sys_FlashLock                   := $201F0
+fs_CreateFile                   := $201F4
+strupper                        := $201F8
+strlower                        := $201FC
+fs_AbsPath                      := $20200
+fs_MultByBytesPerSector         := $20204
+_LoadLibraryOP1                 := $20208
+fs_OpenFileInDir                := $2020C
+fs_SetSize                      := $20210
+fs_WriteFile                    := $20214
+sys_HLToString                  := $20218
+fs_DeleteFile                   := $2021C
+_DelVar                         := $20220
+_CreateVar                      := $20224
+gui_InputNoClear                := $20228
+fs_InitClusterMap               := $2022C
+sys_WriteFlash                  := $20230
+sys_WriteFlashA                 := $20234
+sys_WriteFlashFull              := $20238
+sys_WriteFlashByteFull          := $2023C
+fs_ParentDir                    := $20240
+fs_StrToFileEntry               := $20244
+fs_DirList                      := $20248
+sys_Free                        := $2024C
+sys_CallExecuteFile             := $20250
+sys_JumpExecuteFile             := $20254
+sys_InitDevice                  := $20258
+sys_DeinitDevice                := $2025C
+sys_GetDeviceAddress            := $20260
+sys_ReadDevice                  := $20264
+sys_WriteDevice                 := $20268
+fs_GetSector                    := $2026C
+fs_WriteByte                    := $20270
+fs_RenameFile                   := $20274
+_SetCursorPos                   := $20278
+fs_CreateDir                    := $2027C
+gfx_BufClear                    := $20280
+gfx_LcdClear                    := $20284
+fs_SanityCheck                  := $20288
+sys_SetupOnInterruptHandler     := $2028C
+gui_PrintChar                   := $20290
+gfx_SetDraw                     := $20294
+gui_PrintString                 := $20298
+gui_PrintLine                   := $2029C
+gui_PrintUInt                   := $202A0
+sys_WriteFlashFullRam           := $202A4
+sys_WriteFlashByteFullRam       := $202A8
+fs_GetFilePtr                   := $202AC
+sys_ExecuteFileFromPtr          := $202B0
+sys_ExecuteFileHL               := $202B4
+sys_TurnOff                     := $202B8
+sys_NextProcessId               := $202BC
+sys_PrevProcessId               := $202C0
+sys_FreeProcessId               := $202C4
+fs_GarbageCollect               := $202C8
+gfx_SwapTextColors              := $202CC
+fs_WriteNewFile                 := $202D0
+gfx_SetFont                     := $202D4
+gfx_SetDefaultFont              := $202D8
+sys_FreeRunningProcessId        := $202DC
+util_Zx7Decompress              := $202E0
+gfx_Compute                     := $202E8
+gfx_FillRectangle               := $202EC
+gfx_FillScreen                  := $202F0
+gfx_GetFontPtr                  := $202F4
+gfx_HorizLine                   := $202F8
+gfx_InitStdPalette              := $202FC
+gfx_NextLine                    := $20300
+gfx_PrintChar                   := $20304
+gfx_PrintHexA                   := $20308
+gfx_PrintUInt                   := $2030C
+gfx_Rectangle                   := $20310
+gfx_Set8bpp                     := $20314
+gfx_Set16bpp                    := $20318
+gfx_SetTextXY                   := $2031C
+gfx_Sprite                      := $20320
+gfx_Sprite2x                    := $20324
+gfx_VertLine                    := $20328
+sys_Malloc32Align32             := $2032C
+sys_Malloc64Align256            := $20330
+gfx_PrintStringXY               := $20334
+gfx_GetTextX                    := $20338
+gfx_GetTextY                    := $2033C
+fs_CheckWritable                := $20340
+fs_CheckWritableFD              := $20344
+sys_OpenFileInPath              := $20348
+sys_VarString                   := $2034C
+fs_GetFreeSpace                 := $20350
+fs_GetFDPtr                     := $20354
+fs_GetFDLen                     := $20358

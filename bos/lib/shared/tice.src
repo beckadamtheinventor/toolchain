@@ -221,16 +221,12 @@ _boot_IsAfterNoon               := 0005C8h
 ; _os_SetFlagByte                 := 021D20h
 ; _os_GetFlagByte                 := 021D24h
 ; _os_GetCursorPos                := 021D28h
-_os_PutStrFull                  := bos.gui_Print
-	extern bos.gui_Print
+_os_PutStrFull                  := 020180h ;bos.gui_Print
 ; _os_PutStrLine                  := 021D30h
-_os_SetCursorPos                := bos._SetCursorPos
-	extern bos._SetCursorPos
+_os_SetCursorPos                := 020278h ;bos._SetCursorPos
 ; _os_AppInit                     := 021D40h
-_os_GetKey                      := bos.sys_WaitKeyCycle
-	extern bos.sys_WaitKeyCycle
-_os_GetCSC                      := bos.sys_GetKey
-	extern bos.sys_GetKey
+_os_GetKey                      := 020170h ;bos.sys_WaitKeyCycle
+_os_GetCSC                      := 020154h ;bos.sys_GetKey
 ; _os_DisableCursor               := 021DE4h
 ; _os_EnableCursor                := 021DE8h
 ; _os_FontDrawText                := 021E00h
@@ -285,12 +281,10 @@ _os_GetCSC                      := bos.sys_GetKey
 ; _os_NewLine                     := 0207F0h
 ; _os_MoveDown                    := 0207F4h
 ; _os_MoveUp                      := 020800h
-_os_ClrLCDFull                  := bos._ClrScrn
-_os_ClrLCD                      := bos._ClrScrn
-	extern bos._ClrScrn
+_os_ClrLCDFull                  := 0201CCh ;bos._ClrScrn
+_os_ClrLCD                      := 0201CCh ;bos._ClrScrn
 ; _os_ClrTxtShd                   := 020818h
-_os_HomeUp                      := bos._HomeUp
-	extern bos._HomeUp
+_os_HomeUp                      := 0201D0h ;bos._HomeUp
 ; _os_RunIndicOn                  := 020844h
 ; _os_RunIndicOff                 := 020848h
 ; _os_DelRes                      := 020E5Ch
